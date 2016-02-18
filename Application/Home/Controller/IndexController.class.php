@@ -5,6 +5,7 @@ use Org\Net\Http;
 use Org\Net\Snoopy;
 use Org\Net\simple_html_dom;
 class IndexController extends Controller {
+
     public function index(){
 
          $url  = "http://movie.douban.com/top250";
@@ -20,9 +21,9 @@ class IndexController extends Controller {
         $html->load_file($url);
         $dom = $html->find('.grid_view');
 
-        $movie_names = array("大内密探零零发","少林足球","国产凌凌漆");
-        foreach($movie_names as $name)
-        var_dump($this->getMagnet($name));
+//        $movie_names = array("大内密探零零发","少林足球","国产凌凌漆");
+//        foreach($movie_names as $name)
+//        var_dump($this->getMagnet($name));
 
        // $movie_data_model = M("MovieData");
 
