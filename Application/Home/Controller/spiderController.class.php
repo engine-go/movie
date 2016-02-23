@@ -96,31 +96,41 @@ class SpiderController extends Controller {
 
         $html->clear();
 
-        $this->spiderMagnet();
+//        //获得磁力链接
+//        $this->spiderMagnet();
     }
 
     //爬虫抓取磁力链接
-    private function spiderMagnet(){
+    public function spiderMagnet(){
 
         $map['magnet'] = '';
-        $ret = $this->movie_data_model->where($map)->limit(25)->select();
+        $ret  = $this->movie_data_model->where($map)->limit(25)->select();
         $data = array();
+       // dump($ret);
         if( !empty($ret) ) {
             $num =0;
             foreach ($ret as $key => $movie) {
                 $data['id'] = $movie['id'];
                 $data['magnet'] = $this->getMagnet($movie['title']);
-                $this->movie_data_model->save($data);
-                $num++;
+                if( !empty($data['magnet']) && strlen($data['magnet']) > 0 ){
+                    $this->movie_data_model->save($data);
+                    $num++;
+                }else{
+                    $data['magnet']="0";
+                    $this->movie_data_model->save($data);
+                }
             }
 
-            echo "update {$num} records";
+            echo $num;exit;
         }
 
-        echo "no records";
+        echo 0;
 
     }
 
+    public function test(){
+        echo 123;
+    }
 
 
     //处理豆瓣电影标题的一些特殊字符
@@ -140,16 +150,29 @@ class SpiderController extends Controller {
 
         $source_url = "https://btdigg.org/search?info_hash=&q={$keyword}";
 
+
+
+
         $snoopy  = new Snoopy();
+        $snoopy->read_timeout=10;
+        $snoopy->agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0";
         $snoopy->fetch($source_url);
 
+        $status =   Http::get_http_response_code($source_url);
+//        if ( $status!=200 ){
+//                return $status;
+//        }
+        var_dump($status);
+
         $document = $snoopy->results; //document结果
-        //dump($document);exit;
+
+        //$document = Http::requestGet($source_url);
 
 
         $html = new simple_html_dom();
        // $html->load_file($source_url);
         $html->load($document);
+
 
         foreach( $html->find(".ttth a") as $a ){
                 if( strlen($a->href) > 0 ){
@@ -157,6 +180,9 @@ class SpiderController extends Controller {
                 }
         }
     }
+
+
+
 
 
 }

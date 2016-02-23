@@ -3,11 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <title></title>
+    <link rel="stylesheet" href="__PUBLIC__/bootstrap/css/bootstrap.min.css">
+    <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.js"></script>
+    <script src="__PUBLIC__/bootstrap/js/bootstrap.min.js"></script>
+    <script src="__PUBLIC__/zeroclipboard/ZeroClipboard.min.js"></script>
+
+    <style>
+        header{margin-top:0px;border:solid 1px #ddd;}
+        .main-content{padding:15px;}
+        .movie-info{margin-bottom: 10px;}
+
+        .poster{float:left;}
+    </style>
 </head>
 <body>
 
-<php> foreach($list as $row){ </php>
-        {$row.title}
-<php> }</php>
+<header>
+    <ul class="nav nav-pills">
+        <li><a href="#">豆瓣电影Top250</a></li>
+        <li><a href="#">福利后续...</a></li>
+        <li><a href="#">观看方式</a></li>
+    </ul>
+</header>
+
+
+<!--container-fluid begin-->
+<div class="container-fluid main-content">
+
+    <!--loop begin-->
+    <php> foreach($list as $row){ </php>
+            <div class="row movie-info">
+                <div class="col-md-12">
+                    <img class="poster" src="{$row.img}" alt="{$row.title}"/>
+
+                    <h4>{$row.title} <span>{$row.en_title}</span></h4>
+
+                        <a href="{$row.magnet}">启动磁力连接</a>
+                        <button data-copy="{$row.magnet} "class="btn btn-success js-copy-magnet">复制连接</button>
+                </div>
+            </div>
+    <php> }</php>
+    <!--loop end-->
+
+</div>
+
+<script>
+
+    ZeroClipboard.config({
+        swfPath: "__PUBLIC__/zeroclipboard/ZeroClipboard.swf"
+    });
+
+    //初始化
+    var client = new ZeroClipboard( $(".js-copy-magnet") );
+
+    client.on( "ready", function( readyEvent ) {
+            console.log(readyEvent);
+            client.on( "copy", function( event ) {
+                var clipboard = event.clipboardData;
+                clipboard.setData("text/plain",event.target.dataset.copy); //copy
+            } );
+    } );
+
+</script>
+
+
 </body>
 </html>
