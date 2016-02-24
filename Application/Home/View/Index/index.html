@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
     <title></title>
     <link rel="stylesheet" href="__PUBLIC__/bootstrap/css/bootstrap.min.css">
     <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.js"></script>
@@ -10,10 +12,14 @@
 
     <style>
         header{margin-top:0px;border:solid 1px #ddd;}
-        .main-content{padding:15px;}
-        .movie-info{margin-bottom: 10px;}
+        .main-content{padding:15px;margin:0 auto;
+        border:#ddd 1px;}
+        .movie-info{margin-bottom:10px;}
+        .movie-data,.movie-rank{border:solid #ddd 1px;overflow:hidden;}
+        .movie-data{width:60%;float:left;padding:5px;}
+        .movie-rank{padding:5px;}
 
-        .poster{float:left;}
+        .poster{float:left;margin-right:5%;}
     </style>
 </head>
 <body>
@@ -30,17 +36,32 @@
 <!--container-fluid begin-->
 <div class="container-fluid main-content">
 
+
     <!--loop begin-->
     <php> foreach($list as $row){ </php>
             <div class="row movie-info">
                 <div class="col-md-12">
-                    <img class="poster" src="{$row.img}" alt="{$row.title}"/>
+                    <div class="clearfix">
+                        <img class="poster" src="{$row.img}" alt="{$row.title}"/>
 
-                    <h4>{$row.title} <span>{$row.en_title}</span></h4>
 
-                        <a href="{$row.magnet}">启动磁力连接</a>
-                        <button data-copy="{$row.magnet} "class="btn btn-success js-copy-magnet">复制连接</button>
+
+                        <div class="movie-data">
+                            <div class="movie-rank">
+                                <h2>{$row.rank}</h2>
+                                <p>{$row.quote}</p>
+                            </div>
+
+                            <h4>{$row.title}</h4>
+                            <h5>{$row.en_title}</h5>
+                            <h5>{$row.other_title}</h5>
+                            <a href="{$row.magnet}" class="btn btn-primary">启动磁力</a>
+                            <button data-copy="{$row.magnet}" class="btn btn-success js-copy-magnet">复制连接</button>
+
+                        </div>
+                       </div>
                 </div>
+
             </div>
     <php> }</php>
     <!--loop end-->
