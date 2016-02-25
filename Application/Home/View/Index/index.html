@@ -18,6 +18,7 @@
         .movie-data,.movie-rank{border:solid #ddd 1px;overflow:hidden;}
         .movie-data{width:60%;float:left;padding:5px;}
         .movie-rank{padding:5px;}
+        .magnet-word{word-break: break-all;}
 
         .poster{float:left;margin-right:5%;}
     </style>
@@ -57,9 +58,13 @@
                             <h5>{$row.other_title}</h5>
                             <a href="{$row.magnet}" class="btn btn-primary">启动磁力</a>
                             <button data-copy="{$row.magnet}" class="btn btn-success js-copy-magnet">复制连接</button>
-
+                            <div class="jumbotron magnet-word">
+                                <p>{$row.magnet}
+                                </p>
+                            </div>
                         </div>
-                       </div>
+
+                    </div>
                 </div>
 
             </div>
