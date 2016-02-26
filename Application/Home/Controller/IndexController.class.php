@@ -21,5 +21,11 @@ class IndexController extends Controller {
         $this->display();
     }
 
+    public function watchway(){
+
+
+        $this->display();
+    }
+
 
 }

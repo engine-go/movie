@@ -59,43 +59,45 @@
 <!--container-fluid begin-->
 <div class="container-fluid main-content">
 
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">第一步：获取磁力连接</h3>
+        </div>
+        <div class="panel-body">
+            我们以"肖申克的救赎"举例
+            <img alt="肖申克的救赎" src="http://7xqfiw.com1.z0.glb.clouddn.com/E9CCC868-BBAA-4938-9B7A-18055009E30F.png"/>
+        </div>
+    </div>
 
-    <!--loop begin-->
-    <php> foreach($list as $row){ </php>
-            <div class="row movie-info">
-                <div class="col-md-12">
-                    <div class="clearfix">
-                        <img class="poster" src="{$row.img}" alt="{$row.title}"/>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">第二部：将链接添加到网盘</h3>
+        </div>
+        <div class="panel-body">
+            链接可以添加到以下网盘：
+            <a href="http://yun.baidu.com/">百度云</a>或<a href="http://115.com/">115网盘</a>
+            <p>1.百度云教程：我们先打开百度云，注册登录就略过了。（这个都不会，那你给我发个红包，我手把手教你...）</p>
 
+            <p>step1：点击网盘</p>
+            <img alt="百度云" src="http://7xqfiw.com1.z0.glb.clouddn.com/FA8DC394-EF51-4832-A96D-324566FC32F9.png"/>
+            <p>step2：点击离线下载</p>
+            <img src="http://7xqfiw.com1.z0.glb.clouddn.com/69372620-9895-4D1A-8385-EBB98A6390C6.png"/>
+            <p>step3：点击新建链接任务</p>
+            <img src="http://7xqfiw.com1.z0.glb.clouddn.com/A0C08762-0C0B-444E-97C3-B4FAFE78DA36.png"/>
+            <p>step4：将在第一步复制的链接添加在此处 </p>
+            <img src="http://7xqfiw.com1.z0.glb.clouddn.com/B029A10C-D576-4B8B-A321-F521B9F739CC.png"/>
+            <p>step5: 点击开始下载 </p>
+            <img src="http://7xqfiw.com1.z0.glb.clouddn.com/DBA81C43-3DFD-4599-846F-F36A8269CC97.png"/>
+            <p>step6: 点击播放 </p>
+            <img src="http://7xqfiw.com1.z0.glb.clouddn.com/F27E52D0-D87B-4C2E-9F6D-E1528E3E46BD.png"/>
+            <p>step6：高清五码之"要么忙着活，要么忙着死" </p>
+            <img src="http://7xqfiw.com1.z0.glb.clouddn.com/6F5D1B9A-6E49-4965-9EAE-36D6B962515C.png"/>
+        </div>
 
-
-                        <div class="movie-data ">
-                            <div class="movie-rank clearfix">
-                                <h2>{$row.rank}</h2>
-                                <p class="quote">
-                                    <span class="inq">{$row.quote}</span>
-                                </p>
-                            </div>
-
-                            <h4>{$row.title}</h4>
-                            <h5>{$row.en_title}</h5>
-                            <h5>{$row.other_title}</h5>
-                            <a href="{$row.magnet}" class="btn btn-primary">启动磁力</a>
-                            <button data-copy="{$row.magnet}" class="btn btn-success js-copy-magnet">复制连接</button>
-                            <div class="jumbotron magnet-word">
-                                <p>{$row.magnet}
-                                </p>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-            </div>
-    <php> }</php>
-    <!--loop end-->
+    </div>
 
 </div>
+<!--container-fluid end-->
 
 <script>
 
