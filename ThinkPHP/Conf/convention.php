@@ -44,6 +44,7 @@ return  array(
     'DEFAULT_LANG'          =>  'zh-cn', // 默认语言
     'DEFAULT_THEME'         =>  '',	// 默认模板主题名称
     'DEFAULT_MODULE'        =>  'Home',  // 默认模块
+    'MODULE_ALLOW_LIST'     => array('Home','Admin','User'),
     'DEFAULT_CONTROLLER'    =>  'Index', // 默认控制器名称
     'DEFAULT_ACTION'        =>  'index', // 默认操作名称
     'DEFAULT_CHARSET'       =>  'utf-8', // 默认输出编码
