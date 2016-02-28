@@ -6,4 +6,6 @@ return array(
     'DB_PWD'=>'mada27825445',
     'DB_NAME'=>'movie',
     'DB_TYPE'=>'mysql',
+	
+    'URL_MODEL'=>1,
 );
