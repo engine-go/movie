@@ -24,6 +24,14 @@ class IndexController extends Controller {
         $list = $this->movieModel->order('rank desc')
                 ->limit($Page->firstRow.','.$Page->listRows)->select();
 
+      //  dump($list);
+        foreach($list as $key=>$row){
+            foreach($row as $index=>$val) {
+                if ($index == "img") {
+                    $list[$key]['img'] = str_replace('ipst', 'spst', $val);
+                }
+            }
+        }
         $this->assign('list',$list);// 赋值数据集
         $this->assign('page',$show);// 赋值分页输出
         $this->display(); // 输出模板
