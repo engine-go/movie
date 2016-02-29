@@ -4,6 +4,7 @@
 <!--container-fluid begin-->
 <div class="container-fluid main-content">
 
+    <php>if($list){</php>
 
     <!--loop begin-->
     <php> foreach($list as $row){ </php>
@@ -43,7 +44,17 @@
     <!-- page begin-->
         {$page}
     <!-- page end-->
-</div>
+
+    <php>}else{</php>
+        <p>这里什么都没有</p>
+    <php>}</php>
+
+
+
+</div><!--container-fluid end-->
+
+
+<div style='margin:0 auto;width:0px;height:0px;overflow:hidden;'> <img src="http://7xqfiw.com1.z0.glb.clouddn.com/iqi_t012eae739ed413f5fc.jpg" width='700'></div>
 
 <script>
 
