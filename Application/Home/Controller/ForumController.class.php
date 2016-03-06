@@ -41,11 +41,13 @@ class ForumController extends Controller {
         $upload->rootPath='/data/wwwroot/movie/';
         $upload->savePath='Public/';
         $upload->exts=array('jpg','jpeg','gif','png');
-        if(!$upload->upload()){
-           dump( $upload->getError());
-        }else{
-            echo 'success!';
-        }
+//        if(!$upload->upload()){
+//           dump( $upload->getError());
+//        }else{
+//            echo 'success!';
+//        }
+        echo  "http://7xrl3c.com1.z0.glb.clouddn.com/my-php-logo.png";
+
         //dump($ret);
         exit;
         require 'vendor/autoload.php';
@@ -88,9 +90,11 @@ class ForumController extends Controller {
         }
 
 
+    }
 
 
-
+    public function doTopic(){
+        var_dump(trim($_POST['content']));
     }
 
 

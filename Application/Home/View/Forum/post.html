@@ -20,15 +20,15 @@
 <div class="container-fluid main-content">
 
 
-        <form  method="post" id="post-form">
+        <form  action="javascript:doSubmit()" method="post" id="post-form">
             <div class="form-group">
                 <label for="title">主题</label>
                 <input type="text" name="title" class="form-control" id="title" placeholder="主题">
             </div>
 
 
-<textarea class="form-control" id="post-textarea" rows="20" >
-</textarea>
+            <textarea class="form-control" name="content" id="post-textarea" rows="20" >
+            </textarea>
 
             <button type="submit" class="btn btn-default">发布</button>
         </form>
@@ -49,21 +49,41 @@
 <!--这里引用jquery和wangEditor.js-->
 <script type="text/javascript">
 
+    $(document).ready(function(){
+
+    });
+
     //初始化编辑器
     var editor = new wangEditor('post-textarea');
 
     // 上传图片
     editor.config.uploadImgUrl = "{:U('/Forum/upload')}";
-
     editor.create();
 
 
-    $('#post-form').submit(function () {
+    function doSubmit(){
 
         // 获取编辑器区域完整html代码
-        var html = editor.$txt.html();
-alert(html);
-    });
+        var content = editor.$txt.html();
+        var title = $("#title").val();
+
+        $.ajax({
+                 type: "post",
+                    url: "{:U('Forum/doTopic')}",
+                async:false,
+                dataType:"json",
+                data:"title=" + title + "&content=" + content,
+                success:function (data) {
+            alert(data.info);
+           }
+       });
+    }
+
+
+
+
+
+
 
 
 </script>
