@@ -56,6 +56,8 @@
             text-align: center;
             border-top: 1px solid #e5e5e5;
         }
+
+        .nav-pills>li.fR{float:right;}
     </style>
 </head>
 <body>
@@ -63,12 +65,20 @@
 <header>
 
     <ul class="nav nav-pills">
-        <!--<li><img class="img-header" src="http://7xqfiw.com1.z0.glb.clouddn.com/iqi_t012eae739ed413f5fc.jpg"/></li>-->
         <li><a href="{:U('Index/index')}">豆瓣电影Top250</a></li>
-        <li><a href="#">福利后续...</a></li>
-        <li><a href="{:U('watchway')}">观看方式</a></li>
-        <li><a href="{:U('about')}">关于</a></li>
+        <li><a href="{:U('Technology/index')}">讨论区</a></li>
+        <li><a href="{:U('Index/watchway')}">观看</a></li>
+        <li><a href="{:U('Forum/post')}">发帖</a></li>
+        <?php if( $user ){ ?>
+        <li class="fR"><a href="{:U('Index/logout')}">退出</a></li>
+        <li class="fR"><a href="{:U('Index/index')}">{$user.username}</a></li>
+
+        <?php }else{ ?>
+        <li class="fR"><a href="{:U('Passport/register')}">注册</a></li>
+        <li class="fR"><a href="{:U('Passport/login')}">登录</a></li>
+        <?php } ?>
     </ul>
+
 </header>
 
 

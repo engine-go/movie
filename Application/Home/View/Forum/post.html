@@ -1,0 +1,71 @@
+<include file="Public:header" />
+
+<!--引入wangEditor.css-->
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/editor/css/wangEditor.min.css">
+
+
+
+
+<style>
+    .sub-nav{font-size: 90%;}
+    /**.sub-nav>li>a:focus,.sub-nav>li>a:hover{background:#B3ADE9;}
+    </style>
+<ul class="nav nav-pills sub-nav">
+    <php>foreach($sections as $row){</php>
+    <li><a href="{:U('/Forum/index',array('id'=>$row['id'] ))}">{$row.name}</a></li>
+    <php>}</php>
+</ul>
+
+<!--container-fluid begin-->
+<div class="container-fluid main-content">
+
+
+        <form  method="post" id="post-form">
+            <div class="form-group">
+                <label for="title">主题</label>
+                <input type="text" name="title" class="form-control" id="title" placeholder="主题">
+            </div>
+
+
+<textarea class="form-control" id="post-textarea" rows="20" >
+</textarea>
+
+            <button type="submit" class="btn btn-default">发布</button>
+        </form>
+
+
+
+
+</div><!--container-fluid end-->
+
+
+
+<!--引入jquery和wangEditor.js-->   <!--注意：javascript必须放在body最后，否则可能会出现问题-->
+<script type="text/javascript" src="__PUBLIC__/editor/js/lib/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/editor/js/wangEditor.min.js"></script>
+
+
+
+<!--这里引用jquery和wangEditor.js-->
+<script type="text/javascript">
+
+    //初始化编辑器
+    var editor = new wangEditor('post-textarea');
+
+    // 上传图片
+    editor.config.uploadImgUrl = "{:U('/Forum/upload')}";
+
+    editor.create();
+
+
+    $('#post-form').submit(function () {
+
+        // 获取编辑器区域完整html代码
+        var html = editor.$txt.html();
+alert(html);
+    });
+
+
+</script>
+
+<include file="Public:footer" />

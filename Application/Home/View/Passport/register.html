@@ -1,0 +1,56 @@
+<include file="Public:header" />
+
+
+<!--container-fluid begin-->
+<div class="container-fluid main-content">
+
+    <form action="javascript:doSubmit()" method="post" id="reg-form">
+    <div class="form-group">
+        <label for="email">邮箱</label>
+        <input type="email" name="email" class="form-control" id="email" placeholder="Email">
+    </div>
+    <div class="form-group">
+            <label for="username">昵称</label>
+            <input type="text" name="username" class="form-control" id="username" placeholder="username">
+    </div>
+    <div class="form-group">
+        <label for="password">密码</label>
+        <input type="password" name="password" class="form-control" id="password" placeholder="Password">
+    </div>
+    <div class="form-group">
+        <label for="repassword">确认密码</label>
+        <input type="password" name="repassword" class="form-control" id="repassword" placeholder="Password">
+    </div>
+
+    <button type="submit" class="btn btn-default">注册</button>
+    </form>
+
+
+
+</div><!--container-fluid end-->
+
+<script>
+
+
+    function doSubmit(){
+        var param = $("#reg-form").serialize();
+        $.ajax({
+                    type:"post",
+                    url:"{:U("Passport/doRegister")}",
+                async:false,
+                dataType:"json",
+                data:param,
+                success:function(data){
+            alert(data.info);
+            location.href="{:U('/Index/index')}";
+        }
+    });
+    }
+
+
+    $(document).ready(function(){
+
+    })
+</script>
+
+<include file="Public:footer" />

@@ -1,0 +1,27 @@
+<include file="Public:header" />
+<style>
+    .sub-nav{font-size: 90%;}
+    /**.sub-nav>li>a:focus,.sub-nav>li>a:hover{background:#B3ADE9;}
+    </style>
+<ul class="nav nav-pills sub-nav">
+    <php>foreach($sections as $row){</php>
+    <li><a href="{:U('/Forum/index',array('id'=>$row['id'] ))}">{$row.name}</a></li>
+    <php>}</php>
+</ul>
+
+<!--container-fluid begin-->
+<div class="container-fluid main-content">
+
+    <div class="row" >
+
+    </div>
+
+
+</div><!--container-fluid end-->
+
+
+<div style='margin:0 auto;width:0px;height:0px;overflow:hidden;'> <img src="http://7xqfiw.com1.z0.glb.clouddn.com/iqi_23c1960929721a5ae514164a1dfe425a.jpg"/></div>
+
+
+
+<include file="Public:footer" />

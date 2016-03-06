@@ -39,6 +39,13 @@ abstract class Controller {
         //控制器初始化
         if(method_exists($this,'_initialize'))
             $this->_initialize();
+
+        $info = $this->getTheCookie('token');
+        if($info) {
+            unset($info['password']);
+            $this->userCookie = $info;
+            $this->assign('user', $info);
+        }
     }
 
     /**
@@ -292,6 +299,19 @@ abstract class Controller {
             // 中止执行  避免出错后继续执行
             exit ;
         }
+    }
+
+    //解密cookkie
+    function getTheCookie($key){
+
+        if(!isset($_COOKIE[$key])){
+            return false;
+        }
+        $cookie_info = $_COOKIE[$key];
+        $json_str = Crypt::decrypt($cookie_info,'thisismovieapp');
+        $ret = json_decode($json_str,1);
+
+        return $ret;
     }
 
    /**

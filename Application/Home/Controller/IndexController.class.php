@@ -1,6 +1,7 @@
 <?php
 namespace Home\Controller;
 use Think\Controller;
+use Home\Model;
 use Org\Net\Http;
 use Org\Net\Snoopy;
 use Think\Page;
@@ -11,8 +12,10 @@ class IndexController extends Controller {
 
     public function __construct(){
         parent::__construct();
+       // var_dump($_COOKIE['token'],$_SESSION['uid']);
         $this->movieModel = M("MovieData");
     }
+
 
     public function index(){
 
@@ -42,6 +45,14 @@ class IndexController extends Controller {
 
 
         $this->display();
+    }
+
+    public function logout(){
+
+        cookie('token',null);
+        $_SESSION['uid']=null;
+        redirect(U("/Index/index"));
+        return;
     }
 
 
