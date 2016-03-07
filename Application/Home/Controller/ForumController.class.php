@@ -23,6 +23,41 @@ class ForumController extends Controller {
     }
 
     public function index(){
+
+        $map['sid'] = I('id'); //版块id
+        $list = D('ForumTopic')->where($map)->select();
+        $this->assign('list',$list);
+        $this->display();
+    }
+
+    /**
+     * 主题详情
+     */
+    public function topicDetail(){
+
+        $map['tid'] = I('tid'); //主题id
+        $topicData = D('ForumTopic')->where($map)->find();
+
+
+        //$map['is_first'] = 1;
+        $postData = D('ForumPost')->where($map)->select();
+        $allPost = array();
+        foreach($postData as $key=> $row){
+
+            $row['content'] = trim($row['content']);
+            $row['content'] = html_entity_decode($row['content']);
+
+                    if( $row['is_first'] ){
+                        $firstPost = $row;
+                    }else{
+                        $allPost[$key]=$row;
+                    }
+        }
+
+
+        $this->assign('firstPost',$firstPost); //首贴
+        $this->assign('allPost',$postData); //所有帖子
+        $this->assign('topic',$topicData);
         $this->display();
     }
 
@@ -52,7 +87,7 @@ class ForumController extends Controller {
 
 
     /*上传到七牛云存储对象中*/
-    public function upload2Qiniu(){
+    private function upload2Qiniu(){
 
 
         require 'vendor/autoload.php';
@@ -96,7 +131,14 @@ class ForumController extends Controller {
     }
 
 
+    //新增一个话题
     public function doTopic(){
+
+        $user = D('User');
+        $ret = $user->isLogin();
+        if(!$ret){
+            redirect('/Index/login');
+        }
 
         //创建主题
         $data  = array();
@@ -113,7 +155,8 @@ class ForumController extends Controller {
         //$topicData = D('ForumTopic')->where("tid=".$topic_id)->find();
         //发布帖子
         $detailData= array();
-        $detailData['content'] = I('content');
+        $content = I('content');
+        $detailData['content'] = $content;
         $detailData['is_first'] = 1;
         $detailData['tid'] = $topic_id;
         $detailData['author'] = $this->userCookie['username'];
@@ -121,9 +164,10 @@ class ForumController extends Controller {
         $detailData['create_time']=time();
         $ret  = D('ForumPost')->add($detailData);
         if($ret){
-            echo 'success';
+            $url = U('/Forum/index');
+            redirect($url);
         }else{
-            echo 'fail';
+            echo 'error|发布帖子失败';
         }
 
 

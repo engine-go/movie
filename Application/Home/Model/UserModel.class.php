@@ -35,4 +35,66 @@ class UserModel extends Model{
         return array('status'>1,'info'=>$ret);
     }
 
+
+    /**
+     * @return bool
+     */
+    public function isLogin(){
+
+
+        if( $_COOKIE['token']  ){
+            return true;
+        }elseif( $_SESSION['uid'] ){
+            
+            if( !isset($_SESSION['last_access'])
+                || (time() - $_SESSION['last_access']) > 1800 ){
+                return false;
+            }
+
+            $map['uid'] = $_SESSION['uid'];
+            $info = $this->where($map)->find();
+            if( !$info['uid'] ){
+                return false;
+            }
+
+            $this->setLoginCookie($info,86400);
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
+
+    /**
+     * @param $info
+     * @param int $livetime
+     * @return bool
+     */
+    public function setLogin($info,$livetime=86400){
+
+        //设置cookie
+        $this->setLoginCookie($info,$livetime);
+
+        //设置session
+        $_SESSION['uid'] = isset($info['uid'])?$info['uid']:0;
+        $_SESSION['last_access'] = time();
+        return true;
+
+    }
+
+
+    /**
+     * @param $ret
+     * @param int $livetime
+     * @return bool
+     */
+    private function setLoginCookie($info,$livetime=86400){
+        $ret = json_encode($info);
+        $encrypt_str = Crypt::encrypt($ret,'thisismovieapp');
+        cookie('token',$encrypt_str,$livetime);
+        return true;
+    }
+
+
 }

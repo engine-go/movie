@@ -2,7 +2,9 @@
 <style>
     .sub-nav{font-size: 90%;}
     /**.sub-nav>li>a:focus,.sub-nav>li>a:hover{background:#B3ADE9;}*/
-
+    .wrap-content{padding:15px 20px;}
+    .topic-content{padding:10px 30px;border:#ddd solid 2px;border-radius:4px;
+    }
     </style>
 <ul class="nav nav-pills sub-nav">
     <php>foreach($sections as $row){</php>
@@ -13,19 +15,26 @@
 <!--container-fluid begin-->
 <div class="container-fluid main-content">
 
-    <php>foreach($list as $row){</php>
-        <div class="row">
-            <div class="col-md-12">
-                <a href="{:U('/Forum/topicDetail',array('tid'=>$row['tid']))}">{$row['title']}</a> | 作者-{$row['author']} | 最后回复-{$row['author']}
+    <div class="topic-head">
+        <h2>{$topic.title}</h2>
+    </div>
+    <div class="row wrap-content" >
+            <div class="topic-content">
+                {$firstPost.content}
             </div>
-        </div>
-    <php>}</php>
+    </div>
+
 
 
 </div><!--container-fluid end-->
 
 
-<div style='margin:0 auto;width:0px;height:0px;overflow:hidden;'> <img src="http://7xqfiw.com1.z0.glb.clouddn.com/iqi_23c1960929721a5ae514164a1dfe425a.jpg"/></div>
+<script>
+//    $(document).ready(function(){
+//        var html_content = "{$firstPost.content}";
+//        alert(html_content);
+//    });
+</script>
 
 
 
