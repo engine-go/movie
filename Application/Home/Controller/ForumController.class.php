@@ -32,26 +32,30 @@ class ForumController extends Controller {
 
     public function upload(){
 
-        //资源存放路径
-        $upload_path = APP_PATH."Public".DIRECTORY_SEPARATOR.'test'.DIRECTORY_SEPARATOR;
-
-       // dump($_FILES);exit;
         //本地上传到
         $upload = new Upload();
         $upload->rootPath='/data/wwwroot/movie/';
         $upload->savePath='Public/';
         $upload->exts=array('jpg','jpeg','gif','png');
-//        if(!$upload->upload()){
-//           dump( $upload->getError());
-//        }else{
-//            echo 'success!';
-//        }
-        echo  "http://7xrl3c.com1.z0.glb.clouddn.com/my-php-logo.png";
+        $ret =  $upload->upload();
+        if(!$ret){
+            echo "error|{$upload->getError()}";
+        }else{
+            $imgInfo = $ret['wangEditorH5File'];
+            $host = $_SERVER['HTTP_HOST'];
+            echo "http://".$host."/movie/".$imgInfo['savepath'].$imgInfo['savename'];
+            exit;
+            //echo  "http://7xrl3c.com1.z0.glb.clouddn.com/{$ret['savename']}";
+        }
 
-        //dump($ret);
-        exit;
+    }
+
+
+    /*上传到七牛云存储对象中*/
+    public function upload2Qiniu(){
+
+
         require 'vendor/autoload.php';
-
 
         // 需要填写你的 Access Key 和 Secret Key
         $accessKey = 'ml7Vji4z-pfZVV8wI-6jTaZmrkBCm7BIiKx7ucWu';
@@ -69,7 +73,7 @@ class ForumController extends Controller {
         $token = $auth->uploadToken($bucket);
 
         // 要上传文件的本地路径
-        $filePath = $upload_path."test.jpg";
+        $filePath = $uploadFile;//$upload_path."test.jpg";
 
 
 
@@ -89,12 +93,42 @@ class ForumController extends Controller {
             dump($ret);
         }
 
-
     }
 
 
     public function doTopic(){
-        var_dump(trim($_POST['content']));
+
+        //创建主题
+        $data  = array();
+        $data['title'] = I('title');
+        $data['create_time']=time();
+        $data['author'] = $this->userCookie['username'];
+        $data['sid'] = 1;
+
+        $topic_id  = D('ForumTopic')->add($data);
+        if (!$topic_id){
+          echo '发布帖子失败';exit;
+        }
+
+        //$topicData = D('ForumTopic')->where("tid=".$topic_id)->find();
+        //发布帖子
+        $detailData= array();
+        $detailData['content'] = I('content');
+        $detailData['is_first'] = 1;
+        $detailData['tid'] = $topic_id;
+        $detailData['author'] = $this->userCookie['username'];
+        $detailData['authorid'] = $this->userCookie['uid'];
+        $detailData['create_time']=time();
+        $ret  = D('ForumPost')->add($detailData);
+        if($ret){
+            echo 'success';
+        }else{
+            echo 'fail';
+        }
+
+
+
+
     }
 
 
