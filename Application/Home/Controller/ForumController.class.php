@@ -164,8 +164,7 @@ class ForumController extends Controller {
         $detailData['create_time']=time();
         $ret  = D('ForumPost')->add($detailData);
         if($ret){
-            $url = U('/Forum/index');
-            redirect($url);
+            echo 'success|发布成功';
         }else{
             echo 'error|发布帖子失败';
         }

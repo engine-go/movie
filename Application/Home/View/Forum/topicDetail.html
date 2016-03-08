@@ -1,10 +1,8 @@
 <include file="Public:header" />
 <style>
-    .sub-nav{font-size: 90%;}
-    /**.sub-nav>li>a:focus,.sub-nav>li>a:hover{background:#B3ADE9;}*/
-    .wrap-content{padding:15px 20px;}
-    .topic-content{padding:10px 30px;border:#ddd solid 2px;border-radius:4px;
-    }
+    .sub-nav{font-size: 90%;background-color:#fff;border-bottom: 1px solid #e2e2e2}
+    .topic-head{padding:0 0 10px 10px;}
+    .topic-content{padding:10px 30px;border-radius:4px;}
     </style>
 <ul class="nav nav-pills sub-nav">
     <php>foreach($sections as $row){</php>
@@ -12,29 +10,26 @@
     <php>}</php>
 </ul>
 
-<!--container-fluid begin-->
-<div class="container-fluid main-content">
 
-    <div class="topic-head">
-        <h2>{$topic.title}</h2>
-    </div>
-    <div class="row wrap-content" >
-            <div class="topic-content">
-                {$firstPost.content}
+
+<div class="box">
+
+    <!--man begin-->
+    <div class="main">
+
+            <div class="topic-head">
+                <h2>{$topic.title}</h2>
             </div>
-    </div>
+            <div class="row" >
+                    <div class="topic-content">
+                        {$firstPost.content}
+                    </div>
+            </div>
+     </div>
+</div>
 
 
 
-</div><!--container-fluid end-->
-
-
-<script>
-//    $(document).ready(function(){
-//        var html_content = "{$firstPost.content}";
-//        alert(html_content);
-//    });
-</script>
 
 
 

@@ -1,8 +1,14 @@
 <include file="Public:header" />
 
 
-<!--container-fluid begin-->
-<div class="container-fluid main-content">
+
+    <!--box begin-->
+    <div class="box">
+
+    <!--content begin-->
+    <div class="main">
+
+
 
     <php>if($list){</php>
 
@@ -42,17 +48,21 @@
     <php> }</php>
     <!--loop end-->
 
-    <!-- page begin-->
-        {$page}
-    <!-- page end-->
 
     <php>}else{</php>
         <p>这里什么都没有</p>
     <php>}</php>
 
 
+    </div><!--main end -->
+    </div><!--box end-->
 
-</div><!--container-fluid end-->
+    <div class="box bottom-page">
+        {$page}
+    </div>
+
+
+
 
 
 <div style='margin:0 auto;width:0px;height:0px;overflow:hidden;'> <img src="http://7xqfiw.com1.z0.glb.clouddn.com/iqi_23c1960929721a5ae514164a1dfe425a.jpg"/></div>
