@@ -25,8 +25,20 @@ class ForumController extends Controller {
     public function index(){
 
         $map['sid'] = I('id'); //版块id
-        $list = D('ForumTopic')->where($map)->select();
+        $count      = D('ForumTopic')->where($map)->count();//查询满足要求的总记录数
+        $Page       = new Page($count,10);// 实例化分页类 传入总记录数和每页显示的记录数
+        $show       = trim($Page->show());// 分页显示输出
+
+
+        $list = D('ForumTopic')->where($map)->limit($Page->firstRow.','.$Page->listRows)
+        ->order('create_time desc')->select();
+
         $this->assign('list',$list);
+
+        //$pages = ;
+        //dump($pages);
+        $this->assign('page',$show);// 赋值分页输出
+        $this->assign('totalPages',$Page->totalPages);
         $this->display();
     }
 
@@ -37,15 +49,18 @@ class ForumController extends Controller {
 
         $map['tid'] = I('tid'); //主题id
         $topicData = D('ForumTopic')->where($map)->find();
-
-
-        //$map['is_first'] = 1;
         $postData = D('ForumPost')->where($map)->select();
+
+
+
+
+        //获取主题帖
         $allPost = array();
         foreach($postData as $key=> $row){
 
             $row['content'] = trim($row['content']);
             $row['content'] = html_entity_decode($row['content']);
+
 
                     if( $row['is_first'] ){
                         $firstPost = $row;
@@ -54,10 +69,10 @@ class ForumController extends Controller {
                     }
         }
 
-
+        $topicData['friendlyTime'] = friendlyDate($topicData['create_time']);
         $this->assign('firstPost',$firstPost); //首贴
         $this->assign('allPost',$postData); //所有帖子
-        $this->assign('topic',$topicData);
+        $this->assign('topic',$topicData); //主题
         $this->display();
     }
 
@@ -131,32 +146,40 @@ class ForumController extends Controller {
     }
 
 
-    //新增一个话题
+    //发帖
     public function doTopic(){
 
         $user = D('User');
         $ret = $user->isLogin();
         if(!$ret){
-            redirect('/Index/login');
+            $jumpUrl = U('/Passport/login');
+            $this->ajaxReturn(array('status'=>1,'info'=>'发帖请先登录','url'=>$jumpUrl));
         }
 
         //创建主题
         $data  = array();
         $data['title'] = I('title');
+
+        if( mb_strlen($data['title'],'UTF-8') < 10 ){
+            $this->ajaxReturn(array('status'=>-1,'info'=>'标题不得小于10个字符'));
+        }
+
         $data['create_time']=time();
         $data['author'] = $this->userCookie['username'];
-        $data['sid'] = 1;
+        $data['sid'] = I('sid');
 
         $topic_id  = D('ForumTopic')->add($data);
         if (!$topic_id){
-          echo '发布帖子失败';exit;
+            $this->ajaxReturn(array('status'=>-3,'info'=>'发布帖子失败'));
         }
 
         //$topicData = D('ForumTopic')->where("tid=".$topic_id)->find();
         //发布帖子
         $detailData= array();
         $content = I('content');
-        $detailData['content'] = $content;
+        $detailData['content'] = trim($content);
+
+
         $detailData['is_first'] = 1;
         $detailData['tid'] = $topic_id;
         $detailData['author'] = $this->userCookie['username'];
@@ -164,9 +187,10 @@ class ForumController extends Controller {
         $detailData['create_time']=time();
         $ret  = D('ForumPost')->add($detailData);
         if($ret){
-            echo 'success|发布成功';
+            $jumpUrl = U('/Forum/index',array('id'=>$data['sid']));
+            $this->ajaxReturn(array('status'=>1,'info'=>'发布成功','url'=>$jumpUrl));
         }else{
-            echo 'error|发布帖子失败';
+            $this->ajaxReturn(array('status'=>1,'info'=>'发布失败'));
         }
 
 

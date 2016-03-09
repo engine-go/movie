@@ -7,24 +7,31 @@
 
 
 <style>
-    .sub-nav{font-size: 90%;}
-    /**.sub-nav>li>a:focus,.sub-nav>li>a:hover{background:#B3ADE9;}
+
     </style>
-<ul class="nav nav-pills sub-nav">
-    <php>foreach($sections as $row){</php>
-    <li><a href="{:U('/Forum/index',array('id'=>$row['id'] ))}">{$row.name}</a></li>
-    <php>}</php>
-</ul>
 
-<!--container-fluid begin-->
-<div class="container-fluid main-content">
 
+
+
+    <!--man begin-->
+    <div class="main">
 
         <form  action="javascript:doSubmit()" method="post" id="post-form">
+
+            <div class="form-group movie-select">
+                <label for="section">讨论类别</label>
+                 <select name="sid" id="section">
+                        <option value="1">技术讨论区</option>
+                     <option value="2">电影资源</option>
+                     <option value="3">封面杀手</option>
+                 </select>
+            </div>
+
             <div class="form-group">
                 <label for="title">主题</label>
                 <input type="text" name="title" class="form-control" id="title" placeholder="主题">
             </div>
+
 
 
             <textarea class="form-control" name="content" id="post-textarea" rows="20" >
@@ -33,10 +40,8 @@
             <button type="submit" class="btn btn-default">发布</button>
         </form>
 
+</div><!--main end-->
 
-
-
-</div><!--container-fluid end-->
 
 
 
@@ -66,15 +71,19 @@
         // 获取编辑器区域完整html代码
         var content = editor.$txt.html();
         var title = $("#title").val();
-
+        var section = $("#section").val();
         $.ajax({
                  type: "post",
                     url: "{:U('Forum/doTopic')}",
                 async:false,
                 dataType:"json",
-                data:"title=" + title + "&content=" + content,
+                data:"title=" + title + "&content=" + content+"&sid="+section,
                 success:function (data) {
-            alert(data.info);
+                   if(data.status>0){
+                       location.href=data.url;
+                   }else{
+                       alert(data.info);
+                   }
            }
        });
     }

@@ -6,7 +6,7 @@
     <div class="box">
 
     <!--content begin-->
-    <div class="main">
+    <div class="movie-main">
 
 
 
@@ -34,7 +34,7 @@
                             <h5>{$row.other_title}</h5>
                             <!--<a href="{$row.magnet}" class="btn btn-primary">启动磁力</a>-->
                             <button data-copy="{$row.magnet}" class="btn btn-success js-copy-magnet">复制连接</button>
-                            <a href="{:U('/detail',array('id'=>$row['id']))}" class="btn btn-default" >详情</a>
+                            <!--<a href="{:U('/detail',array('id'=>$row['id']))}" class="btn btn-default" >详情</a>-->
                             <div class="jumbotron magnet-word">
                                 <p class="magnet-link">{$row.magnet}
                                 </p>

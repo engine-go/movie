@@ -1,8 +1,21 @@
 <include file="Public:header" />
 <style>
     .sub-nav{font-size: 90%;background-color:#fff;border-bottom: 1px solid #e2e2e2}
-    .topic-head{padding:0 0 10px 10px;}
+    .topic-head{
+        padding:10px;
+        line-height: 120%;
+        text-align: left;
+        border-bottom: 1px solid #e2e2e2
+    }
     .topic-content{padding:10px 30px;border-radius:4px;}
+    .topic-content p{
+        font-size: 14px;
+        line-height: 1.6;
+        color: #000;
+        word-break: break-all;
+        word-wrap: break-word;
+    }
+    .forum-main{}
     </style>
 <ul class="nav nav-pills sub-nav">
     <php>foreach($sections as $row){</php>
@@ -12,20 +25,23 @@
 
 
 
-<div class="box">
 
-    <!--man begin-->
-    <div class="main">
+<div class="forum-main">  <!--man begin-->
+       <div class="box">
 
             <div class="topic-head">
-                <h2>{$topic.title}</h2>
+                <h1>{$topic.title}</h1>
+                <small class="gray">
+                    {$topic.author} | {$topic.friendlyTime}
+                </small>
             </div>
+
             <div class="row" >
                     <div class="topic-content">
                         {$firstPost.content}
                     </div>
             </div>
-     </div>
+       </div>
 </div>
 
 

@@ -15,9 +15,9 @@
 
     <style>
         body{font-family: "Helvetica Neue", "Luxi Sans", "DejaVu Sans", Tahoma, "Hiragino Sans GB", "Microsoft Yahei", sans-serif;}
-        header{margin-top:0px;border:solid 1px #ddd;}
         .wrapper{background:#e2e2e2;}
-        .main{margin:0 auto;padding:10px 0 0 0;}
+        header ul li{margin:0 auto;}
+        .movie-main{margin:0 auto;padding:2%;}
          a{color:#778087;
              text-decoration: none;
              word-break: break-all
@@ -70,9 +70,7 @@
         }
 
         .my-footer{
-            padding-top: 40px;
-            padding-bottom: 40px;
-            margin-top: 100px;
+            padding:10px 0 10px 0;
             color: #767676;
             text-align: center;
             border-top: 1px solid #e5e5e5;
@@ -85,6 +83,10 @@
             line-height: 120%;
             text-align: left;
             border-bottom: 1px solid #e2e2e2}
+
+        .gray {
+            color: #999;
+        }
     </style>
 </head>
 <body>
@@ -105,6 +107,17 @@
         <li class="fR"><a href="{:U('Passport/login')}">登录</a></li>
         <?php } ?>
     </ul>
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?8dbe51582c3ddcecea14e7055c31f0b5";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
 
 </header>
 

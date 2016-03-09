@@ -38,8 +38,12 @@
                 dataType:"json",
                 data:param,
                 success:function(data){
-            alert(data.info);
-            location.href="{:U('/Index/index')}";
+
+            if(data.status>0){
+                    location.href="{:U('/Index/index')}";
+            }else{
+                alert(data.info);
+            }
         }
     });
     }
