@@ -91,13 +91,13 @@ class PassportController extends Controller {
         $map['email'] = trim($email);
         if( $info = $user->where($map)->find() ){
             if( $info['password']!=md5($password.$info['salt']) ) {
-                $data = array('status' => -1, 'info' => '邮箱不存在或密码错误1');
+                $data = array('status' => -1, 'info' => '邮箱或密码错误');
             }else{
                 $this->setLogin($info,$liveTime);
                 $data = array('status' => 1, 'info' => '登录成功');
             }
         }else{
-            $data = array('status'=>-2,'info'=>'邮箱不存在或密码错误');
+            $data = array('status'=>-2,'info'=>'邮箱或密码错误');
         }
 
 

@@ -15,11 +15,17 @@ use Think\Image;
 
 class ForumController extends Controller {
 
-
+    public $sid="";
 
     public function __construct(){
         parent::__construct();
+        $this->sid = I('id'); //版块id
         $forum_sections = D('ForumSection')->select();
+        foreach($forum_sections as $key=>$section) {
+            $forum_sections[$key]['class'] = ($section['id'] == $this->sid) ? "active" : "";
+        }
+
+        $this->assign('sectionid', $this->sid);
         $this->assign('sections',$forum_sections);
     }
 
@@ -39,11 +45,9 @@ class ForumController extends Controller {
             $list[$key]['friendlyDate'] =  friendlyDate($val['create_time']);
         }
 
+
         //主题列表
         $this->assign('list',$list);
-
-
-
         $this->assign('page',$show);// 赋值分页输出
         $this->assign('totalPages',$Page->totalPages);
         $this->display();
@@ -102,6 +106,8 @@ class ForumController extends Controller {
             $jumpUrl = U('/Passport/login');
             redirect($jumpUrl);
         }
+
+
         $this->display();
     }
 
@@ -216,6 +222,7 @@ class ForumController extends Controller {
 
         $data['create_time']=time();
         $data['author'] = $this->userCookie['username'];
+        $data['lastposter'] = $this->userCookie['username'];
         $data['sid'] = I('sid');
 
         $topic_id  = D('ForumTopic')->add($data);
@@ -223,19 +230,18 @@ class ForumController extends Controller {
             $this->ajaxReturn(array('status'=>-3,'info'=>'发布帖子失败'));
         }
 
-        //$topicData = D('ForumTopic')->where("tid=".$topic_id)->find();
+
         //发布帖子
         $detailData= array();
         $content = I('content');
         $detailData['content'] = trim($content);
-
-
         $detailData['is_first'] = 1;
         $detailData['tid'] = $topic_id;
         $detailData['author'] = $this->userCookie['username'];
         $detailData['authorid'] = $this->userCookie['uid'];
         $detailData['create_time']=time();
         $ret  = D('ForumPost')->add($detailData);
+
         if($ret){
             $jumpUrl = U('/Forum/index',array('id'=>$data['sid']));
             $this->ajaxReturn(array('status'=>1,'info'=>'发布成功','url'=>$jumpUrl));
@@ -260,9 +266,6 @@ class ForumController extends Controller {
         $data['authorid'] = $this->userCookie['uid'];
         $data['create_time'] = time();
 
-//        if( mb_strlen($data['replay'],'UTF-8') < 5 ){
-//            $this->ajaxReturn(array('status'=>-1,'info'=>'标题不得小于10个字符'));
-//        }
 
         if(!D('ForumPost')->add($data)){
             $this->ajaxReturn(array('status'=>-2,'info'=>'回复失败'));
@@ -271,10 +274,13 @@ class ForumController extends Controller {
         //主题的回复+1
         D('ForumTopic')->where("tid=".$data['tid'])->setInc("replies");
 
+        $update_data=array();
+        $update_data['lastposter']=$this->userCookie['username'];
+        D('ForumTopic')->where("tid=".$data['tid'])->save($update_data);
 
+        $section_id =I('id');
 
-
-        $jumpUrl = U('/Forum/topicDetail',array('tid'=>$data['tid']));
+        $jumpUrl = U('/Forum/topicDetail',array('tid'=>$data['tid'],'id'=>$section_id));
         $this->ajaxReturn(array('status'=>1,'info'=>'发布成功','url'=>$jumpUrl));
 
     }

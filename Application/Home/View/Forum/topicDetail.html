@@ -42,7 +42,7 @@
     </style>
 <ul class="nav nav-pills sub-nav">
     <php>foreach($sections as $row){</php>
-    <li><a href="{:U('/Forum/index',array('id'=>$row['id'] ))}">{$row.name}</a></li>
+    <li><a href="{:U('/Forum/index',array('id'=>$row['id']))}" class="{$row['class']}">{$row.name}</a></li>
     <php>}</php>
 </ul>
 
@@ -116,7 +116,7 @@
             url: "{:U('Forum/doReply')}",
             async:false,
             dataType:"json",
-            data:"replay=" + replay+"&tid="+"{$topic.tid}",
+            data:"replay=" + replay+"&tid="+"{$topic.tid}&id="+"{$sectionid}",
             success:function (data) {
                 if(data.status>0){
                     location.href=data.url;
