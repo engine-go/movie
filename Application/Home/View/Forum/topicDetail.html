@@ -1,5 +1,7 @@
 <include file="Public:header" />
 <style>
+    .FR{float:right;text-align: right;}
+    .FL{float:left;text-align: left;}
     .sub-nav{font-size: 90%;background-color:#fff;border-bottom: 1px solid #e2e2e2}
     .topic-head{
         padding:10px;
@@ -15,7 +17,28 @@
         word-break: break-all;
         word-wrap: break-word;
     }
-    .forum-main{}
+    .step20 {
+        height: 20px;
+    }
+    .step10 {
+        height: 10px;
+    }
+    .replayCount{padding:10px 0 20px 10px;}
+    .topic-replay{
+        border-radius: 3px;
+        padding: 5px;
+        display: block;
+        width: 100%;
+        overflow: hidden;
+        word-wrap: break-word;
+        resize: none;
+        height: 120px;
+        border: 1px solid #ccc;
+        outline:none;
+        font-size: 120%;
+
+    }
+    .replay-content{margin-top:10px;}
     </style>
 <ul class="nav nav-pills sub-nav">
     <php>foreach($sections as $row){</php>
@@ -42,11 +65,69 @@
                     </div>
             </div>
        </div>
+
+    <div class="step20"></div>
+    <div class="box">
+
+           <div class="cell replayCount">
+                <div class="FL" style="margin: -3px -5px 0px 0px;">
+                   <span class="gray">{$replyCount} 回复</span>
+                </div>
+           </div>
+
+        <php>foreach($allPosts as $key=>$post ){</php>
+           <div class="cell">
+
+                    <div class="class" id="p_{$post['pid']}">
+                        <span class="gray">{$post.friendlyTime}</span>
+                        <span class="gray">{$post.author}</span>
+                        <span class="gray">{$key+1}楼</span>
+                        <div class="replay-content">{$post.content}</div>
+                    </div>
+
+          </div>
+        <php>}</php>
+    </div>
+
+    <div class="step20"></div>
+    <div class="box">
+        <div class="cell">添加回复</div>
+
+        <div class="cell">
+        <form action="javascript:doReply()" method="post">
+            <textarea name="replay" id="replay" class="topic-replay"></textarea>
+            <div class="step20"></div>
+            <div class="FR"><span class="gray">请尽量回复充满智慧的东西</span></div>
+            <button  type="submit" class="btn btn-default">回复</button>
+        </form>
+        </div>
+    </div>
 </div>
 
 
 
+<script>
 
+    function doReply(){
+
+        var replay = $("#replay").val();
+        $.ajax({
+            type: "post",
+            url: "{:U('Forum/doReply')}",
+            async:false,
+            dataType:"json",
+            data:"replay=" + replay+"&tid="+"{$topic.tid}",
+            success:function (data) {
+                if(data.status>0){
+                    location.href=data.url;
+                }else{
+                    alert(data.info);
+                }
+            }
+        });
+    }
+
+</script>
 
 
 <include file="Public:footer" />

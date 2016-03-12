@@ -40,11 +40,22 @@ abstract class Controller {
         if(method_exists($this,'_initialize'))
             $this->_initialize();
 
+        //获取用户信息
         $info = $this->getTheCookie('token');
         if($info) {
             unset($info['password']);
             $this->userCookie = $info;
             $this->assign('user', $info);
+        }
+
+    }
+
+
+    public function checkLogin(){
+
+        if(! D('User')->isLogin()){
+            $jumpUrl = U('/Passport/login');
+            $this->ajaxReturn(array('status'=>1,'info'=>'发帖请先登录','url'=>$jumpUrl));
         }
     }
 

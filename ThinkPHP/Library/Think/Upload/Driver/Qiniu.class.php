@@ -26,10 +26,10 @@ class Qiniu{
     private $error = '';
 
     private $config = array(
-        'secretKey'      => '', //七牛服务器
-        'accessKey'      => '', //七牛用户
-        'domain'         => '', //七牛密码
-        'bucket'         => '', //空间名称
+        'secretKey'      => 'h4Fa_BE06b1oZvFW4ixqeR8mymtNC6r_4vDx58b4', //七牛服务器
+        'accessKey'      => 'ml7Vji4z-pfZVV8wI-6jTaZmrkBCm7BIiKx7ucWu', //七牛用户
+        'domain'         => '7xrl3c.com1.z0.glb.clouddn.com', //七牛密码
+        'bucket'         => 'movie', //空间名称
         'timeout'        => 300, //超时时间
     );
 

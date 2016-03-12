@@ -47,21 +47,20 @@
 
 <!--引入jquery和wangEditor.js-->   <!--注意：javascript必须放在body最后，否则可能会出现问题-->
 <script type="text/javascript" src="__PUBLIC__/editor/js/lib/jquery-1.10.2.min.js"></script>
-<script type="text/javascript" src="__PUBLIC__/editor/js/wangEditor.min.js"></script>
 
+<script type="text/javascript" src="__PUBLIC__/editor/js/wangEditor.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/editor/js/lib/qiniu.js"></script>
 
 
 <!--这里引用jquery和wangEditor.js-->
 <script type="text/javascript">
 
-    $(document).ready(function(){
 
-    });
 
     //初始化编辑器
     var editor = new wangEditor('post-textarea');
 
-    // 上传图片
+    //上传图片
     editor.config.uploadImgUrl = "{:U('/Forum/upload')}";
     editor.create();
 
@@ -73,14 +72,14 @@
         var title = $("#title").val();
         var section = $("#section").val();
         $.ajax({
-                 type: "post",
-                    url: "{:U('Forum/doTopic')}",
+                type: "post",
+                url: "{:U('Forum/doTopic')}",
                 async:false,
                 dataType:"json",
                 data:"title=" + title + "&content=" + content+"&sid="+section,
                 success:function (data) {
                    if(data.status>0){
-                       location.href=data.url;
+                       window.location.href=data.url;
                    }else{
                        alert(data.info);
                    }

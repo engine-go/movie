@@ -2,7 +2,23 @@
 <style>
     .sub-nav{font-size: 90%;background-color:#fff; border-bottom: 1px solid #e2e2e2}
     /**.sub-nav>li>a:focus,.sub-nav>li>a:hover{background:#B3ADE9;}*/
+    .item_title a{color:#8DB6CD}
+    .item_info{margin-top:5px;}
     .item_author{}
+    .item_replies{
+        line-height: 12px;
+        font-weight: bold;
+        color: white;
+        background-color: #aab0c6;
+        display: inline-block;
+        padding: 2px 10px 2px 10px;
+        -moz-border-radius: 12px;
+        -webkit-border-radius: 12px;
+        border-radius: 12px;
+        text-decoration: none;
+        margin-right: 5px;
+        }
+
     </style>
 <ul class="nav nav-pills sub-nav">
     <php>foreach($sections as $row){</php>
@@ -23,8 +39,18 @@
                            <span class="item_title">
                                <a href="{:U('/Forum/topicDetail',array('tid'=>$row['tid']))}">{$row['title']}</a>
                             </span>
-                            <span class="item_author">{$row['author']}</span>
+
+                            <div class="row item_info">
+                                <div class="col-md-12">
+                                    <span class="item_author"><a href="#">{$row['author']} </a></span>
+                                    <span class="item_author">{$row['friendlyDate']} </span>
+                                    <span class="item_replies"> {$row['replies']} </span>
+                                </div>
+                            </div>
+
                         </div>
+
+
 
                     </div>
                 </div>

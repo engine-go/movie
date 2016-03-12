@@ -10,6 +10,7 @@ use Qiniu\Auth;
 use Qiniu\Storage\UploadManager;
 use Qiniu\Storage\BucketManager;
 use Think\Upload;
+use Think\Image;
 
 
 class ForumController extends Controller {
@@ -24,6 +25,7 @@ class ForumController extends Controller {
 
     public function index(){
 
+
         $map['sid'] = I('id'); //版块id
         $count      = D('ForumTopic')->where($map)->count();//查询满足要求的总记录数
         $Page       = new Page($count,10);// 实例化分页类 传入总记录数和每页显示的记录数
@@ -33,10 +35,15 @@ class ForumController extends Controller {
         $list = D('ForumTopic')->where($map)->limit($Page->firstRow.','.$Page->listRows)
         ->order('create_time desc')->select();
 
+        foreach( $list as $key=>$val){
+            $list[$key]['friendlyDate'] =  friendlyDate($val['create_time']);
+        }
+
+        //主题列表
         $this->assign('list',$list);
 
-        //$pages = ;
-        //dump($pages);
+
+
         $this->assign('page',$show);// 赋值分页输出
         $this->assign('totalPages',$Page->totalPages);
         $this->display();
@@ -60,6 +67,7 @@ class ForumController extends Controller {
 
             $row['content'] = trim($row['content']);
             $row['content'] = html_entity_decode($row['content']);
+            $row['friendlyTime'] = friendlyDate($row['create_time']);
 
 
                     if( $row['is_first'] ){
@@ -71,38 +79,81 @@ class ForumController extends Controller {
 
         $topicData['friendlyTime'] = friendlyDate($topicData['create_time']);
         $this->assign('firstPost',$firstPost); //首贴
-        $this->assign('allPost',$postData); //所有帖子
+
+
+        //统计浏览次数
+        $viewKey = "VIEW_TOPIC_".I('tid');
+        if(!isset($_COOKIE[$viewKey])){
+            setcookie($viewKey,1,strtotime('tomorrow'));
+            D('ForumTopic')->where("tid=".I('tid'))->setInc("views");
+        }
+
+        $allPost=array_values($allPost);
+        $this->assign('allPosts',$allPost); //所有帖子
+        $this->assign('replyCount',count($allPost)); //所有帖子
         $this->assign('topic',$topicData); //主题
         $this->display();
     }
 
     public function post(){
+        $user = D('User');
+        $ret = $user->isLogin();
+        if(!$ret){
+            $jumpUrl = U('/Passport/login');
+            redirect($jumpUrl);
+        }
         $this->display();
     }
 
     public function upload(){
 
+
+
+        if(!D('User')->isLogin()){
+            echo "error|请先登录";exit;
+        }
+
         //本地上传到
         $upload = new Upload();
-        $upload->rootPath='/data/wwwroot/movie/';
-        $upload->savePath='Public/';
+        //$upload->rootPath= dirname($_SERVER['SCRIPT_FILENAME'])."/";
+        $upload->rootPath=ROOT_PATH;
+        $upload->savePath='Public/upload/';
         $upload->exts=array('jpg','jpeg','gif','png');
         $ret =  $upload->upload();
+
         if(!$ret){
             echo "error|{$upload->getError()}";
         }else{
             $imgInfo = $ret['wangEditorH5File'];
-            $host = $_SERVER['HTTP_HOST'];
-            echo "http://".$host."/movie/".$imgInfo['savepath'].$imgInfo['savename'];
-            exit;
-            //echo  "http://7xrl3c.com1.z0.glb.clouddn.com/{$ret['savename']}";
+            $filename = $upload->rootPath.$imgInfo['savepath'].$imgInfo['savename'];
+
+            $image = new Image(1,$filename);
+            $water_file = ROOT_PATH."public/data/common/water.png";
+
+
+            $image->water($water_file,Image::IMAGE_WATER_SOUTHEAST,70);
+            $image->save($filename);
+
+            $uploadImgUrl = $this->upload2Qiniu($filename);
+
+            if($uploadImgUrl){
+                echo $uploadImgUrl;
+            }else{
+                echo "error|上传失败哟！";
+            }
+
         }
 
     }
 
 
     /*上传到七牛云存储对象中*/
-    private function upload2Qiniu(){
+    /**
+     * @param $origin_filename 原图片地址
+     * @return string 如果失败，返回空字符串；如果成功，返回图片地址
+     * @throws \Exception
+     */
+    private function upload2Qiniu($origin_filename){
 
 
         require 'vendor/autoload.php';
@@ -122,25 +173,24 @@ class ForumController extends Controller {
         // 生成上传 Token
         $token = $auth->uploadToken($bucket);
 
+
         // 要上传文件的本地路径
-        $filePath = $uploadFile;//$upload_path."test.jpg";
+        $filePath = $origin_filename;
 
-
-
-
-        // 上传到七牛后保存的文件名
-        $key = 'my-php-logo1.png';
+        // key为上传到七牛后保存的文件名
+        $pathArr = explode("/",$origin_filename);
+        $key = end($pathArr);
 
         // 初始化 UploadManager 对象并进行文件的上传
         $uploadMgr = new UploadManager();
 
         // 调用 UploadManager 的 putFile 方法进行文件的上传
         list($ret, $err) = $uploadMgr->putFile($token, $key, $filePath);
-        echo "\n====> putFile result: \n";
+
         if ($err !== null) {
-            dump($err);
+            return  "";
         } else {
-            dump($ret);
+            return $domain.DIRECTORY_SEPARATOR.$key;
         }
 
     }
@@ -195,6 +245,37 @@ class ForumController extends Controller {
 
 
 
+
+    }
+
+
+    public function doReply(){
+
+        $this->checkLogin();
+
+        $data=array();
+        $data['tid'] = I('tid');
+        $data['content'] = I('replay');
+        $data['author'] = $this->userCookie['username'];
+        $data['authorid'] = $this->userCookie['uid'];
+        $data['create_time'] = time();
+
+//        if( mb_strlen($data['replay'],'UTF-8') < 5 ){
+//            $this->ajaxReturn(array('status'=>-1,'info'=>'标题不得小于10个字符'));
+//        }
+
+        if(!D('ForumPost')->add($data)){
+            $this->ajaxReturn(array('status'=>-2,'info'=>'回复失败'));
+        }
+
+        //主题的回复+1
+        D('ForumTopic')->where("tid=".$data['tid'])->setInc("replies");
+
+
+
+
+        $jumpUrl = U('/Forum/topicDetail',array('tid'=>$data['tid']));
+        $this->ajaxReturn(array('status'=>1,'info'=>'发布成功','url'=>$jumpUrl));
 
     }
 

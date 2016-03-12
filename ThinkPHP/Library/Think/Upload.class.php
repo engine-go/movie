@@ -260,6 +260,10 @@ class Upload {
         }
     }
 
+    public function getQiniuToken(){
+        return $this->uploader->getUploadToken('movie');
+    }
+
     /**
      * 检查上传的文件
      * @param array $file 文件信息
