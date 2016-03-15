@@ -133,12 +133,12 @@ class ForumController extends Controller {
             $imgInfo = $ret['wangEditorH5File'];
             $filename = $upload->rootPath.$imgInfo['savepath'].$imgInfo['savename'];
 
-            $image = new Image(1,$filename);
-            $water_file = ROOT_PATH."public/data/common/water.png";
-
-
-            $image->water($water_file,Image::IMAGE_WATER_SOUTHEAST,70);
-            $image->save($filename);
+//            $image = new Image(1,$filename);
+//            $water_file = ROOT_PATH."public/data/common/water.png";
+//
+//
+//            $image->water($water_file,Image::IMAGE_WATER_SOUTHEAST,70);
+//            $image->save($filename);
 
             $uploadImgUrl = $this->upload2Qiniu($filename);
 
