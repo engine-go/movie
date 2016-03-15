@@ -1,8 +1,6 @@
 <include file="Public:header" />
-<style>
-    .sub-nav{font-size: 90%;}
-    /**.sub-nav>li>a:focus,.sub-nav>li>a:hover{background:#B3ADE9;}
-    </style>
+
+
 <ul class="nav nav-pills sub-nav">
     <php>foreach($sections as $row){</php>
     <li><a href="{:U('/Forum/index',array('id'=>$row['id'] ))}">{$row.name}</a></li>

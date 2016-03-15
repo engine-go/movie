@@ -1,0 +1,50 @@
+<include file="Public:header" />
+
+
+
+<div class="panel panel-default">
+    <div class="panel-heading">{$user.username} 个人主页</div>
+    <div class="panel-body">
+        <form method="post"  action="javascript:doSubmit();" id="info-form">
+
+            <div class="form-group">
+                <label for="username">昵称</label>
+                <input type="text" class="form-control" name="username" id="username" value="{$user.username}">
+            </div>
+            <div class="form-group">
+                <label for="word">语录</label>
+                <input type="text" class="form-control"  name="word"  id="word" value="{$user.word}">
+            </div>
+
+
+            <button type="submit" class="btn btn-default">修改</button>
+          </form>
+    </div>
+</div>
+
+<script>
+
+
+    function doSubmit(){
+        var param = $("#info-form").serialize();
+        $.ajax({
+                 type:"post",
+                    url:"{:U("UserDetail/updateInfo")}",
+                async:false,
+                dataType:"json",
+                data:param,
+                success:function(data){
+
+            if(data.status>0){
+                alert(data.msg);
+            }else{
+                alert(data.msg);
+            }
+        }
+    });
+    }
+
+</script>
+
+
+<include file="Public:footer" />

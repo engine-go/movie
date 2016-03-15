@@ -40,7 +40,7 @@
                 success:function(data){
 
             if(data.status>0){
-                    location.href="{:U('/Index/index')}";
+               location.href=data.url;
             }else{
                 alert(data.info);
             }
@@ -48,10 +48,6 @@
     });
     }
 
-
-    $(document).ready(function(){
-
-    })
 </script>
 
 <include file="Public:footer" />

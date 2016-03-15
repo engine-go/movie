@@ -8,88 +8,14 @@
     <link rel="shortcut icon" href="__PUBLIC__/data/common/favicon.ico"/>
 
     <link rel="stylesheet" href="__PUBLIC__/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="__PUBLIC__/css/reset.css">
+    <link rel="stylesheet" href="__PUBLIC__/css/common.css">
     <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.js"></script>
     <script src="__PUBLIC__/bootstrap/js/bootstrap.min.js"></script>
     <script src="__PUBLIC__/zeroclipboard/ZeroClipboard.min.js"></script>
 
     <style>
-        body{font-family: "Helvetica Neue", "Luxi Sans", "DejaVu Sans", Tahoma, "Hiragino Sans GB", "Microsoft Yahei", sans-serif;}
-        .wrapper{background:#e2e2e2;}
-        header ul li{margin:0 auto;}
-        .movie-main{margin:0 auto;padding:2%;}
-         a{color:#778087;
-             text-decoration: none;
-             word-break: break-all
-         }
 
-        .item_title{
-            font-size: 16px;
-            line-height: 130%;
-            text-shadow: 0px 1px 0px #fff;
-            word-wrap: break-word
-        }
-
-
-        .container{padding:10px;}
-        .box{background-color: #fff;
-            border-radius: 3px;
-            box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.1);
-            border-bottom: 1px solid #e2e2e2;}
-        .bottom-page{margin-top:1%;padding:1%;}
-
-        .movie-info{margin-bottom:10px;}
-        .movie-data{border:solid #ddd 1px;overflow:hidden;}
-        .movie-data{width:60%;float:left;padding:5px;}
-        .movie-rank{padding:5px;}
-        .movie-rank h2{float:left; margin-top:1px;}
-        .magnet-word{word-break: break-all;margin-top:1%;}
-
-        .poster{float:left;margin-right:2%;}
-        .step-title{padding:5px;}
-
-        .img-header{height:50px;}
-
-        .quote {
-            overflow: hidden;
-            padding: 0 24px 5px 20px;
-            margin:0 0 0 20%;
-            background: url(http://7xqfiw.com1.z0.glb.clouddn.com/quotel.png) no-repeat left 4px;
-            width: auto;
-            word-wrap: break-word;
-            border:solid 0px;
-        }
-
-        .quote span.inq {
-            display: inline;
-            background: url(http://7xqfiw.com1.z0.glb.clouddn.com/quoter.png) no-repeat right bottom;
-            color: #666;
-            padding-right: 15px;
-            display: inline-block;
-            word-break: break-all;
-        }
-
-        .my-footer{
-            padding:10px 0 10px 0;
-            color: #767676;
-            text-align: center;
-            border-top: 1px solid #e5e5e5;
-        }
-
-        .nav-pills>li.fR{float:right;}
-        .nav-pills>li>a{border-radius:0;}
-
-        ul.sub-nav{font-size: 90%;background-color:#fff; border-bottom: 1px solid #e2e2e2}
-        ul.sub-nav .active{background:#8DB6CD;color:#ddd;}
-
-        .cell{padding: 10px;
-            font-size: 12px;
-            line-height: 120%;
-            text-align: left;
-            border-bottom: 1px solid #e2e2e2}
-
-        .gray {
-            color: #999;
-        }
     </style>
 </head>
 <body>
@@ -103,10 +29,10 @@
         <li><a href="{:U('Forum/post')}">发帖</a></li>
         <?php if( $user ){ ?>
         <li class="fR"><a href="{:U('Index/logout')}">退出</a></li>
-        <li class="fR"><a href="{:U('Index/index')}">{$user.username}</a></li>
+        <li class="fR"><a href="{:U('UserDetail/index',array('uid'=>$user['uid']))}">{$user.username}</a></li>
 
         <?php }else{ ?>
-        <li class="fR"><a href="{:U('Passport/register')}">注册</a></li>
+        <li class="fR"><a href="{:U('Passport/register/')}">注册</a></li>
         <li class="fR"><a href="{:U('Passport/login')}">登录</a></li>
         <?php } ?>
     </ul>

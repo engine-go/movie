@@ -221,8 +221,8 @@ class ForumController extends Controller {
         }
 
         $data['create_time']=time();
-        $data['author'] = $this->userCookie['username'];
-        $data['lastposter'] = $this->userCookie['username'];
+        $data['author'] = $this->user['username'];
+        $data['lastposter'] = $this->user['username'];
         $data['sid'] = I('sid');
 
         $topic_id  = D('ForumTopic')->add($data);
@@ -233,14 +233,17 @@ class ForumController extends Controller {
 
         //发布帖子
         $detailData= array();
-        $content = I('content');
-        $detailData['content'] = trim($content);
+       // $content = I('content');
+        $detailData['content'] = $_POST['content'];
         $detailData['is_first'] = 1;
         $detailData['tid'] = $topic_id;
-        $detailData['author'] = $this->userCookie['username'];
-        $detailData['authorid'] = $this->userCookie['uid'];
+        $detailData['author'] = $this->user['username'];
+        $detailData['authorid'] = $this->user['uid'];
         $detailData['create_time']=time();
+
+
         $ret  = D('ForumPost')->add($detailData);
+
 
         if($ret){
             $jumpUrl = U('/Forum/index',array('id'=>$data['sid']));
@@ -262,8 +265,8 @@ class ForumController extends Controller {
         $data=array();
         $data['tid'] = I('tid');
         $data['content'] = I('replay');
-        $data['author'] = $this->userCookie['username'];
-        $data['authorid'] = $this->userCookie['uid'];
+        $data['author'] = $this->user['username'];
+        $data['authorid'] = $this->user['uid'];
         $data['create_time'] = time();
 
 
@@ -275,7 +278,7 @@ class ForumController extends Controller {
         D('ForumTopic')->where("tid=".$data['tid'])->setInc("replies");
 
         $update_data=array();
-        $update_data['lastposter']=$this->userCookie['username'];
+        $update_data['lastposter']=$this->user['username'];
         D('ForumTopic')->where("tid=".$data['tid'])->save($update_data);
 
         $section_id =I('id');

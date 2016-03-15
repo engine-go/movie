@@ -1,6 +1,7 @@
 <?php
 namespace Home\Model;
 use Think\Model;
+use Think\Crypt;
 class UserModel extends Model{
 
     //自动验证
@@ -89,11 +90,41 @@ class UserModel extends Model{
      * @param int $livetime
      * @return bool
      */
-    private function setLoginCookie($info,$livetime=86400){
+    public function setLoginCookie($info,$livetime=86400){
         $ret = json_encode($info);
         $encrypt_str = Crypt::encrypt($ret,'thisismovieapp');
         cookie('token',$encrypt_str,$livetime);
         return true;
+    }
+
+    /**
+     * 获取当前登录用户信息
+     * @return bool|mixed
+     */
+    public function getLoginUserInfo(){
+
+        $user_info = $this->getLoginCookie('token');
+        if(!$user_info){
+            if($_SESSION['uid']){
+                $user_info = $this->where('uid='.$_SESSION['uid'])->find();
+            }
+        }
+
+        return $user_info;
+
+    }
+
+    //解密cookkie
+    public function getLoginCookie($key){
+
+        if(!isset($_COOKIE[$key])){
+            return false;
+        }
+        $cookie_info = $_COOKIE[$key];
+        $json_str = Crypt::decrypt($cookie_info,'thisismovieapp');
+        $ret = json_decode($json_str,1);
+
+        return $ret;
     }
 
 

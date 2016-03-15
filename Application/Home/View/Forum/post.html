@@ -4,15 +4,6 @@
 <link rel="stylesheet" type="text/css" href="__PUBLIC__/editor/css/wangEditor.min.css">
 
 
-
-
-<style>
-
-    </style>
-
-
-
-
     <!--man begin-->
     <div class="main">
 
@@ -71,6 +62,8 @@
         var content = editor.$txt.html();
         var title = $("#title").val();
         var section = $("#section").val();
+
+        console.log(content);
         $.ajax({
                 type: "post",
                 url: "{:U('Forum/doTopic')}",

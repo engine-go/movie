@@ -41,10 +41,10 @@ abstract class Controller {
             $this->_initialize();
 
         //获取用户信息
-        $info = $this->getTheCookie('token');
+        $info = D('User')->getLoginUserInfo();
         if($info) {
             unset($info['password']);
-            $this->userCookie = $info;
+            $this->user = $info;
             $this->assign('user', $info);
         }
 
@@ -312,18 +312,6 @@ abstract class Controller {
         }
     }
 
-    //解密cookkie
-    function getTheCookie($key){
-
-        if(!isset($_COOKIE[$key])){
-            return false;
-        }
-        $cookie_info = $_COOKIE[$key];
-        $json_str = Crypt::decrypt($cookie_info,'thisismovieapp');
-        $ret = json_decode($json_str,1);
-
-        return $ret;
-    }
 
    /**
      * 析构方法
