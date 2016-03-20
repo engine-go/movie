@@ -27,6 +27,11 @@ class ForumController extends Controller {
 
         $this->assign('sectionid', $this->sid);
         $this->assign('sections',$forum_sections);
+
+        $upload_url=U('Forum/upload');
+        $this->assign('upload_url',$upload_url);
+        $this->assign('public_upload_path',ROOT_PATH);
+
     }
 
     public function index(){
@@ -112,8 +117,9 @@ class ForumController extends Controller {
     }
 
     public function upload(){
-
-
+//
+//        $filename="/data/wwwroot/movie/Public/upload/2016-03-20/56ee64a7e1cf8.jpg";
+//        $uploadImgUrl = $this->upload2Qiniu($filename);exit;
 
         if(!D('User')->isLogin()){
             echo "error|请先登录";exit;
@@ -124,13 +130,13 @@ class ForumController extends Controller {
         //$upload->rootPath= dirname($_SERVER['SCRIPT_FILENAME'])."/";
         $upload->rootPath=ROOT_PATH;
         $upload->savePath='Public/upload/';
-        $upload->exts=array('jpg','jpeg','gif','png');
+        $upload->exts=array('jpg','jpeg','gif','png','bmp');
         $ret =  $upload->upload();
 
         if(!$ret){
             echo "error|{$upload->getError()}";
         }else{
-            $imgInfo = $ret['wangEditorH5File'];
+            $imgInfo = $ret['file'];
             $filename = $upload->rootPath.$imgInfo['savepath'].$imgInfo['savename'];
 
 //            $image = new Image(1,$filename);
@@ -143,7 +149,25 @@ class ForumController extends Controller {
             $uploadImgUrl = $this->upload2Qiniu($filename);
 
             if($uploadImgUrl){
-                echo $uploadImgUrl;
+
+                $upload_info =  array(
+                    "originalName" =>$imgInfo['name'] ,
+                    "name" => $imgInfo['savename'] ,
+                    "url" => $uploadImgUrl ,
+                    "size" =>$imgInfo['size'],
+                    "type" =>'.'.$imgInfo['ext'] ,
+                    "state" => 'SUCCESS'
+                );
+                    $tmp=array(
+                        "originalName"=>"1.jpg",
+                        "name"=>"1.jpg",
+                        "url"=>"upload/20160320/14584685685566.jpg",
+                        "size"=>"142251",
+                        "type"=>".jpg",
+                        'state'=>'SUCCESS'
+                    );
+                echo json_encode($upload_info);exit;
+
             }else{
                 echo "error|上传失败哟！";
             }
@@ -193,6 +217,7 @@ class ForumController extends Controller {
         // 调用 UploadManager 的 putFile 方法进行文件的上传
         list($ret, $err) = $uploadMgr->putFile($token, $key, $filePath);
 
+
         if ($err !== null) {
             return  "";
         } else {
@@ -234,7 +259,7 @@ class ForumController extends Controller {
         //发布帖子
         $detailData= array();
        // $content = I('content');
-        $detailData['content'] = $_POST['content'];
+        $detailData['content'] = $_POST['editorValue'];
         $detailData['is_first'] = 1;
         $detailData['tid'] = $topic_id;
         $detailData['author'] = $this->user['username'];

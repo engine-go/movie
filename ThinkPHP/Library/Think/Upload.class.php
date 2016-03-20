@@ -152,6 +152,9 @@ class Upload {
                 $file['type']   =   finfo_file ( $finfo ,  $file['tmp_name'] );
             }
 
+            //保存文件大小
+            $file['size']   =   trim($file['size']);
+
             /* 获取上传文件后缀，允许上传无后缀文件 */
             $file['ext']    =   pathinfo($file['name'], PATHINFO_EXTENSION);
 

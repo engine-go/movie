@@ -1,7 +1,19 @@
 <include file="Public:header" />
+<link href="__PUBLIC__/umeditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+<script>
 
-<!--引入wangEditor.css-->
-<link rel="stylesheet" type="text/css" href="__PUBLIC__/editor/css/wangEditor.min.css">
+    upload_url="{$upload_url}";
+    public_upload_path="{$public_upload_path}";
+    console.log(upload_url);
+    console.log("public_upload_path:"+public_upload_path);
+
+</script>
+
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/umeditor/umeditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/umeditor/umeditor.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/umeditor/lang/zh-cn/zh-cn.js"></script>
+
+
 
 
     <!--man begin-->
@@ -25,8 +37,9 @@
 
 
 
-            <textarea class="form-control" name="content" id="post-textarea" rows="20" >
-            </textarea>
+            <!--style给定宽度可以影响编辑器的最终宽度-->
+            <script type="text/plain" id="post-textarea" style="width:1000px;height:240px;">
+             </script>
 
             <button type="submit" class="btn btn-default">发布</button>
         </form>
@@ -36,53 +49,31 @@
 
 
 
-<!--引入jquery和wangEditor.js-->   <!--注意：javascript必须放在body最后，否则可能会出现问题-->
-<script type="text/javascript" src="__PUBLIC__/editor/js/lib/jquery-1.10.2.min.js"></script>
-
-<script type="text/javascript" src="__PUBLIC__/editor/js/wangEditor.min.js"></script>
-<script type="text/javascript" src="__PUBLIC__/editor/js/lib/qiniu.js"></script>
-
-
-<!--这里引用jquery和wangEditor.js-->
 <script type="text/javascript">
 
 
 
-    //初始化编辑器
-    var editor = new wangEditor('post-textarea');
+    //实例化编辑器
+       var um = UM.getEditor('post-textarea');
+       function doSubmit(){
+           var param = $("#post-form").serialize();
+           $content_html = um.getContent();
+           $.ajax({
+                       type:"post",
+                       url:"{:U('Forum/doTopic')}",
+                   async:false,
+                   dataType:"json",
+                   data:param,
+                   success:function(data){
 
-    //上传图片
-    editor.config.uploadImgUrl = "{:U('/Forum/upload')}";
-    editor.create();
-
-
-    function doSubmit(){
-
-        // 获取编辑器区域完整html代码
-        var content = editor.$txt.html();
-        var title = $("#title").val();
-        var section = $("#section").val();
-
-        console.log(content);
-        $.ajax({
-                type: "post",
-                url: "{:U('Forum/doTopic')}",
-                async:false,
-                dataType:"json",
-                data:"title=" + title + "&content=" + content+"&sid="+section,
-                success:function (data) {
-                   if(data.status>0){
-                       window.location.href=data.url;
-                   }else{
-                       alert(data.info);
-                   }
-           }
-       });
-    }
-
-
-
-
+                       if(data.status>0){
+                           location.href=data.url;
+                       }else{
+                           alert(data.info);
+                       }
+                 }
+            });
+       }
 
 
 
