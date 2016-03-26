@@ -21,28 +21,28 @@
 
         <form  action="javascript:doSubmit()" method="post" id="post-form">
 
-            <div class="form-group movie-select">
-                <label for="section">讨论类别</label>
-                 <select name="sid" id="section">
-                        <option value="1">技术讨论区</option>
-                     <option value="2">电影资源</option>
-                     <option value="3">封面杀手</option>
-                 </select>
-            </div>
-
-            <div class="form-group">
-                <label for="title">主题</label>
-                <input type="text" name="title" class="form-control" id="title" placeholder="主题">
-            </div>
-
-
             <div class="container">
+                <div class="form-group movie-select">
+                    <label for="section">讨论类别</label>
+                    <select name="sid" id="section">
+                        <option value="1">技术讨论区</option>
+                        <option value="2">电影资源</option>
+                        <option value="3">封面杀手</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="title">主题</label>
+                    <input type="text" name="title" class="form-control" id="title" placeholder="主题">
+                </div>
+
             <!--style给定宽度可以影响编辑器的最终宽度-->
-            <script type="text/plain" id="post-textarea"style="width:100%;">
-             </script>
+            <script type="text/plain" id="post-textarea"style="width:100%;"> </script>
+
+                <button type="submit" class="btn btn-default">发布</button>
             </div>
 
-            <button type="submit" class="btn btn-default">发布</button>
+
         </form>
 
 </div><!--main end-->
